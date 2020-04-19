@@ -8,26 +8,72 @@ using System.Threading.Tasks;
 
 namespace OrderedJson.Core
 {
-    public class Blocks : IOJMethod, IList<Block>
+    public class OJMethods : IOJMethod, IList<IOJMethod>
     {
-        private List<Block> blocks;
+        private List<IOJMethod> methods;
 
-        public Blocks(List<Block> blocks)
+        public OJMethods(List<IOJMethod> methods)
         {
-            this.blocks = blocks;
+            this.methods = methods;
         }
-        public Blocks(params Block[] blocks)
+        public OJMethods(List<Block> blocks)
         {
-            this.blocks = new List<Block>(blocks);
+            this.methods = blocks.Cast<IOJMethod>().ToList();
         }
+        public OJMethods(params IOJMethod[] methods)
+        {
+            this.methods = new List<IOJMethod>(methods);
+        }
+
+        public IOJMethod this[int index] { get => ((IList<IOJMethod>)methods)[index]; set => ((IList<IOJMethod>)methods)[index] = value; }
 
 
         #region method
-        public string Name => blocks.Last().Name;
+        public string Name => methods.Last().Name;
 
-        public Type ReturnType => blocks.Last().ReturnType;
+        public Type ReturnType => methods.Last().ReturnType;
 
-        public List<(string, Type)> ArgTypes => blocks.Last().ArgTypes;
+        public List<(string, Type)> ArgTypes => methods.Last().ArgTypes;
+
+        public int Count => ((IList<IOJMethod>)methods).Count;
+
+        public bool IsReadOnly => ((IList<IOJMethod>)methods).IsReadOnly;
+
+        public void Add(IOJMethod item)
+        {
+            ((IList<IOJMethod>)methods).Add(item);
+        }
+
+        public void Clear()
+        {
+            ((IList<IOJMethod>)methods).Clear();
+        }
+
+        public bool Contains(IOJMethod item)
+        {
+            return ((IList<IOJMethod>)methods).Contains(item);
+        }
+
+        public void CopyTo(IOJMethod[] array, int arrayIndex)
+        {
+            ((IList<IOJMethod>)methods).CopyTo(array, arrayIndex);
+        }
+
+        public IEnumerator<IOJMethod> GetEnumerator()
+        {
+            return ((IList<IOJMethod>)methods).GetEnumerator();
+        }
+
+        public int IndexOf(IOJMethod item)
+        {
+            return ((IList<IOJMethod>)methods).IndexOf(item);
+        }
+
+        public void Insert(int index, IOJMethod item)
+        {
+            ((IList<IOJMethod>)methods).Insert(index, item);
+        }
+
         public object Invoke(OJContext context, params object[] args)
         {
             object returnValue = null;
@@ -37,68 +83,22 @@ namespace OrderedJson.Core
             }
             return returnValue;
         }
-        #endregion
 
-        #region list
-
-        public int Count => ((IList<Block>)blocks).Count;
-
-        public bool IsReadOnly => ((IList<Block>)blocks).IsReadOnly;
-
-        public Block this[int index] {
-            get => ((IList<Block>)blocks)[index];
-            set => ((IList<Block>)blocks)[index] = value;
-        }
-        public void Add(Block item)
+        public bool Remove(IOJMethod item)
         {
-            ((IList<Block>)blocks).Add(item);
-        }
-
-        public void Clear()
-        {
-            ((IList<Block>)blocks).Clear();
-        }
-
-        public bool Contains(Block item)
-        {
-            return ((IList<Block>)blocks).Contains(item);
-        }
-
-        public void CopyTo(Block[] array, int arrayIndex)
-        {
-            ((IList<Block>)blocks).CopyTo(array, arrayIndex);
-        }
-
-        public IEnumerator<Block> GetEnumerator()
-        {
-            return ((IList<Block>)blocks).GetEnumerator();
-        }
-
-        public int IndexOf(Block item)
-        {
-            return ((IList<Block>)blocks).IndexOf(item);
-        }
-
-        public void Insert(int index, Block item)
-        {
-            ((IList<Block>)blocks).Insert(index, item);
-        }
-
-
-        public bool Remove(Block item)
-        {
-            return ((IList<Block>)blocks).Remove(item);
+            return ((IList<IOJMethod>)methods).Remove(item);
         }
 
         public void RemoveAt(int index)
         {
-            ((IList<Block>)blocks).RemoveAt(index);
+            ((IList<IOJMethod>)methods).RemoveAt(index);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IList<Block>)blocks).GetEnumerator();
+            return ((IList<IOJMethod>)methods).GetEnumerator();
         }
         #endregion
+
     }
 }

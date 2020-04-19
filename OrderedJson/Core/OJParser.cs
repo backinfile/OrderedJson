@@ -38,7 +38,7 @@ namespace OrderedJson.Core
             {
                 return null;
             }
-            return new Blocks(blocks);
+            return new OJMethods(blocks);
         }
     }
 }
