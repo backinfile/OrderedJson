@@ -9,9 +9,8 @@ namespace OrderedJson.Parser
 {
     public class ParseDefiner
     {
-        public static OJData ParseClass(Type type)
+        public static void ParseClass(Type type, OJData data)
         {
-            OJData data = new OJData();
             //Type type = typeof(CommondDefiner);
             var methodInfos = type.GetMethods();
 
@@ -20,8 +19,6 @@ namespace OrderedJson.Parser
                 IOJMethod method = new OJMethodImpl(methodInfo);
                 data[method.Name] = method;
             }
-
-            return data;
         }
 
     }

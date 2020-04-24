@@ -63,8 +63,8 @@ namespace OrderedJson.Tokenize
             //(TokenType.Continue,    @"(\bcontinue\b)"),
             //("return",      @"(\breturn\b)"),
             //("function",    @"(\bfunction\b)"),
-            (TokenType.True,        @"(\btrue\b)"),
-            (TokenType.False,       @"(\bfalse\b)"),
+            //(TokenType.True,        @"(\btrue\b)"),
+            //(TokenType.False,       @"(\bfalse\b)"),
 
             (TokenType.Name,        @"([A-Za-z_$][\w_-]*)")
 

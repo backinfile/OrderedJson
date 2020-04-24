@@ -11,10 +11,15 @@ namespace OrderedJson.Parser
 {
     public class TokenParser
     {
+        /// <summary>
+        /// 以“$+数字”形式的参数为待赋值参数，函数映射后，进行赋值
+        /// </summary>
+
         int index = 0;
 
         public readonly List<Block> blocks = new List<Block>();
         private readonly OJData data;
+        internal readonly Dictionary<int, Block> lasyBlocks = new Dictionary<int, Block>();
 
         List<Token> tokens;
         int length;
@@ -45,30 +50,45 @@ namespace OrderedJson.Parser
             if (Test(TokenType.True))
             {
                 Next();
-                return new Block(true);
+                return new Block().SetValue(true);
             }
             if (Test(TokenType.False))
             {
                 Next();
-                return new Block(false);
+                return new Block().SetValue(false);
             }
             if (Test(TokenType.Int))
             {
                 var token = Match(TokenType.Int);
                 if (int.TryParse(token.value, out int intValue))
                 {
-                    return new Block(intValue);
+                    return new Block().SetValue(intValue);
                 }
                 throw new RuntimeException($"{token.GetExceptionString()} {token.value}不能转化为整数");
             }
             if (Test(TokenType.Str))
             {
-                return new Block(Match(TokenType.Str).value);
+                return new Block().SetValue(Match(TokenType.Str).value);
             }
             if (Test(TokenType.Semicolon))
             {
                 Next();
                 return null;
+            }
+            if (Test(TokenType.Name))
+            {
+                string value = Value().value;
+                //Console.WriteLine("in this "+value);
+                if (value.StartsWith("$"))
+                {
+                    if (int.TryParse(value.Substring(1), out int no))
+                    {
+                        Next();
+                        Block block = new Block();
+                        lasyBlocks[no] = block;
+                        return block;
+                    }
+                }
             }
 
             if (Test(TokenType.LBrace))
@@ -98,7 +118,7 @@ namespace OrderedJson.Parser
 
                 if (stmts.Any())
                 {
-                    return new Block(stmts);
+                    return new Block().SetValue(stmts);
                 }
             }
             else
@@ -106,7 +126,7 @@ namespace OrderedJson.Parser
                 Stmt stmt = GetStmt();
                 if (stmt != null)
                 {
-                    return new Block(new List<Stmt>() { stmt });
+                    return new Block().SetValue(new List<Stmt>() { stmt });
                 }
             }
             return null;
@@ -146,7 +166,9 @@ namespace OrderedJson.Parser
                     names
                     .Take(names.Count - 1)
                     .Reverse()
-                    .Select(str => new Block(new List<Stmt>() { new Stmt(data.GetMethod(str), new List<Block>())}))
+                    .Select(str => new Block()
+                         .SetValue(new List<Stmt>() { new Stmt(data.GetMethod(str), new List<Block>()) })
+                         )
                     );
             }
 
@@ -185,6 +207,10 @@ namespace OrderedJson.Parser
             if (index >= length) return false;
             var token = tokens[index];
             return token.type == type;
+        }
+        private Token Value()
+        {
+            return tokens[index];
         }
         private Token Match(TokenType type, string error = null)
         {

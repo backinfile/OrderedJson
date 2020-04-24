@@ -15,8 +15,7 @@ namespace OrderedJson.Code
 
         public readonly List<Block> args;
         private IOJMethod method;
-
-        public List<(string, Type)> ArgTypes => method.ArgTypes;
+        private bool isRemaped = false;
 
         public Type ReturnType => method.ReturnType;
 
@@ -33,26 +32,51 @@ namespace OrderedJson.Code
             this.method = method;
         }
 
+        public void SetRemaped(string remapName)
+        {
+            isRemaped = true;
+            Name = remapName;
+        }
+
+        /// <summary>
+        /// stmt当作oj函数调用
+        ///     当stmt是映射时，需要提供args参数
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public object Invoke(OJContext context, params object[] args)
         {
+            if (isRemaped)
+            {
+                if (args.Length != this.args.Count)
+                {
+                    throw new RuntimeException($"{Name}参数个数不匹配：需要{this.args.Count}个 提供了{args.Length}个");
+                }
+
+                for (int i = 0; i < args.Length; i++)
+                {
+                    this.args[i].SetValue(args[i]);
+                }
+            }
             return method.Invoke(context, this.args.ToArray());
         }
 
 
         #region localvar
 
-        internal int GetLocalVar(string name)
-        {
-            return parent.localVar[name];
-        }
-        internal bool HasLocalVar(string name)
-        {
-            return parent.localVar.ContainsKey(name);
-        }
-        internal void SetLocalVar(string name, int value)
-        {
-            parent.localVar[name] = value;
-        }
+        //internal int GetLocalVar(string name)
+        //{
+        //    return parent.localVar[name];
+        //}
+        //internal bool HasLocalVar(string name)
+        //{
+        //    return parent.localVar.ContainsKey(name);
+        //}
+        //internal void SetLocalVar(string name, int value)
+        //{
+        //    parent.localVar[name] = value;
+        //}
 
 
         #endregion

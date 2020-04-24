@@ -56,6 +56,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OJApp\OJApp.csproj">
+      <Project>{E7B50130-3F7B-44FD-91CB-4616E8D60E17}</Project>
+      <Name>OJApp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OrderedJson\OrderedJson.csproj">
       <Project>{81D924DA-F16F-451C-8E19-EC7F071A085A}</Project>
       <Name>OrderedJson</Name>

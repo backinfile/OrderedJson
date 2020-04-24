@@ -1,4 +1,5 @@
 ﻿
+using OrderedJson.Code;
 using OrderedJson.Parser;
 using OrderedJson.Tokenize;
 using System;
@@ -16,9 +17,23 @@ namespace OrderedJson.Core
     {
         private readonly OJData data;
         private TokenParser parser;
-        public OJParser(Type ApiDefiner)
+        public OJParser(Type ApiDefiner, Dictionary<string, string> remaps = null)
         {
-            data = ParseDefiner.ParseClass(ApiDefiner);
+            data = new OJData();
+            ParseDefiner.ParseClass(ApiDefiner, data);
+
+            if (remaps != null)
+            {
+                foreach (var pair in remaps)
+                {
+                    var name = pair.Key;
+                    var code = pair.Value;
+                    if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(code))
+                    {
+                        data[name] = ParseRemapCode(code, name);
+                    }
+                }
+            }
         }
 
 
@@ -39,6 +54,30 @@ namespace OrderedJson.Core
                 return null;
             }
             return new OJMethods(blocks);
+        }
+
+        public IOJMethod ParseRemapCode(string code, string filename)
+        {
+            parser = new TokenParser(data);
+            var tokens = DoTokenize.Tokenize(code, filename);
+            parser.Compile(tokens);
+            var blocks = parser.blocks;
+            if (blocks == null || blocks.Count != 1)
+            {
+                return null;
+            }
+            List<Block> args = new List<Block>();
+            for (int i = 0; i < 10; i++)
+            {
+                if (parser.lasyBlocks.ContainsKey(i))
+                {
+                    args.Add(parser.lasyBlocks[i]);
+                }
+            }
+
+            Stmt stmt = new Stmt(new OJMethods(blocks), args);
+            stmt.SetRemaped(filename);
+            return stmt;
         }
     }
 }

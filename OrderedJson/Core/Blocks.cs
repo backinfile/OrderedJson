@@ -33,7 +33,7 @@ namespace OrderedJson.Core
 
         public Type ReturnType => methods.Last().ReturnType;
 
-        public List<(string, Type)> ArgTypes => methods.Last().ArgTypes;
+        //public List<(string, Type)> ArgTypes => methods.Last().ArgTypes;
 
         public int Count => ((IList<IOJMethod>)methods).Count;
 

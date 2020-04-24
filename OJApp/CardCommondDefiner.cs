@@ -13,13 +13,18 @@ namespace OJApp
         {
             context.hostCard.TurnStart = method;
         }
-        public static void IncreaseHealth(GameContext context, int value)
+        public static void IncreaseHealth(GameContext context, int value = 5)
         {
             context.hostCard.health += value;
         }
-        public static void Log(GameContext context, object message)
+        public static void Log(GameContext context, object message, object message2 = null)
         {
-            Console.WriteLine(message.ToString());
+            string output = message.ToString();
+            if (message2 != null)
+            {
+                output += message2.ToString();
+            }
+            Console.WriteLine(output);
         }
         public static void LogInt(GameContext context, int message)
         {
@@ -31,17 +36,25 @@ namespace OJApp
             return context.hostCard.health;
         }
 
-        public static void If(GameContext context, IOJMethod condition, IOJMethod action)
+        public static void If(GameContext context, bool condition, IOJMethod action)
         {
-            if ((bool)condition.Invoke(context))
+            if (condition)
             {
                 action.Invoke(context);
             }
         }
-
-        public static void Ifelse(GameContext context, IOJMethod condition, IOJMethod action, IOJMethod other)
+        public static bool True(GameContext context)
         {
-            if ((bool)condition.Invoke(context))
+            return true;
+        }
+        public static bool False(GameContext context)
+        {
+            return false;
+        }
+
+        public static void Ifelse(GameContext context, bool condition, IOJMethod action, IOJMethod other)
+        {
+            if (condition)
             {
                 action.Invoke(context);
             }
@@ -81,6 +94,11 @@ namespace OJApp
         {
             return value > then;
 
+        }
+
+        public static void Do(GameContext gameContext, IOJMethod oJMethod1, IOJMethod oJMethod2)
+        {
+            // 改装成可变参数
         }
 
         public static void SetHealth(GameContext context, Card card, int value)

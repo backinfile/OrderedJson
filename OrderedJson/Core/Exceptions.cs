@@ -6,7 +6,15 @@ using System.Threading.Tasks;
 
 namespace OrderedJson.Core
 {
-    public class TokenizeException : ApplicationException
+    public class OJException : Exception
+    {
+        public OJException(string message) : base(message)
+        {
+        }
+    }
+
+
+    public class TokenizeException : OJException
     {
         public TokenizeException(string message) : base(message)
         {
@@ -14,7 +22,7 @@ namespace OrderedJson.Core
 
     }
 
-    public class DefinerException : ApplicationException
+    public class DefinerException : OJException
     {
         public DefinerException(string message) : base(message)
         {
@@ -24,7 +32,7 @@ namespace OrderedJson.Core
 
 
 
-    public class ParseException : ApplicationException
+    public class ParseException : OJException
     {
         public ParseException(string message) : base(message)
         {
@@ -32,7 +40,7 @@ namespace OrderedJson.Core
 
     }
 
-    public class RuntimeException: ApplicationException
+    public class RuntimeException: OJException
     {
         public RuntimeException(string message) : base(message)
         {

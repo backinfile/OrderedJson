@@ -14,8 +14,6 @@ namespace OrderedJson.Core
 
         Type ReturnType { get;}
 
-        List<(string, Type)> ArgTypes { get; }
-
         object Invoke(OJContext context,  params object[] args);
     }
 }
