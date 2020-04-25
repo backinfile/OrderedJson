@@ -11,6 +11,8 @@ namespace OJApp
     {
         public Card hostCard;
         public Card cursor;
+
+        public List<Card> enemies = new List<Card>() { new Card(), new Card() };
     }
 
     public class Card

@@ -46,6 +46,10 @@ namespace OrderedJson.Core
                     }
                 }
             }
+            else if (values.Count > argTypes.Count)
+            {
+                throw new RuntimeException($"{name}参数个数不匹配：需要{argTypes.Count}个 提供了{values.Count}个");
+            }
 
 
             for (int i = 0; i < values.Count; i++)

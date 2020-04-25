@@ -23,9 +23,9 @@ namespace OJApp
         public static void TestMethod2()
         {
             //string code = @"if: true, {IncreaseHealth:;Log:'in ',health; iftrue}";
-            string code = "iftrue:{Log:'fff'}, {log:'false'}";
+            string code = "iftrue:{Log:'fff'}";
             Dictionary<string, string> remaps = new Dictionary<string, string>();
-            remaps.Add("iftrue", "ifelse:false,$1,$2");
+            remaps.Add("iftrue", "if:{Equals:health,10},$1");
 
             var parser = new OJParser(typeof(CardCommondDefiner), remaps);
             IOJMethod method = parser.Parse(code, Filename);

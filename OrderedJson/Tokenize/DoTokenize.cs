@@ -23,11 +23,11 @@ namespace OrderedJson.Tokenize
             int lineno = 1;
             while (cursor < length) 
             {
-                string prestr = "";
+                StringBuilder prestr = new StringBuilder();
                 while (cursor < length && Blanks.Contains(buffer[cursor]))
                 {
                     if (buffer[cursor] == NewLine) lineno++;
-                    prestr += buffer[cursor++];
+                    prestr.Append(buffer[cursor++]);
                 }
                 if (cursor >= length) break;
 
@@ -39,8 +39,8 @@ namespace OrderedJson.Tokenize
                     var match = Regex.Match(buffer.Substring(cursor), "^"+reg);
                     if (match.Success)
                     {
-                        prestr += match.Value;
-                        Token token = new Token(type, match.Groups[1].Value, prestr, filename, lineno, cursor);
+                        prestr.Append(match.Value);
+                        Token token = new Token(type, match.Groups[1].Value, prestr.ToString(), filename, lineno, cursor);
                         tokens.Add(token);
 
                         cursor += match.Value.Length;

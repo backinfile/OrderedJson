@@ -43,5 +43,18 @@ namespace OJTest
             method.Invoke(context);
             Assert.AreEqual(context.hostCard.health, 15);
         }
+
+
+        [TestMethod]
+        public void ForeachTest()
+        {
+            string code = "ForCards:AllEnemyCards, cur.setHealth:111";
+            IOJMethod method = parser.Parse(code, Filename);
+            method.Invoke(context);
+            foreach (var card in context.enemies)
+            {
+                Assert.AreEqual(card.health, 111);
+            }
+        }
     }
 }

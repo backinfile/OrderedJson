@@ -16,6 +16,7 @@ namespace OrderedJson.Parser
 
             foreach (var methodInfo in methodInfos)
             {
+                if (!methodInfo.IsStatic) continue;
                 IOJMethod method = new OJMethodImpl(methodInfo);
                 data[method.Name] = method;
             }

@@ -86,7 +86,7 @@ namespace OJApp
 
         public static List<Card> AllenemyCards(GameContext context)
         {
-            return new List<Card>() { new Card() { health = 1 }, new Card() { health = 1 } };
+            return context.enemies;
         }
 
 
@@ -105,6 +105,22 @@ namespace OJApp
         {
             card.health = value;
         }
+
+        public static bool Equals(GameContext context, object obj1, object obj2)
+        {
+            if (obj1 is IOJMethod method1)
+            {
+                obj1 = method1.Invoke(context);
+            }
+            if (obj2 is IOJMethod method2)
+            {
+                obj2 = method2.Invoke(context);
+            }
+            if (obj1 == obj2) return true;
+            if (obj1.Equals(obj2)) return true;
+            return false;
+        }
+
         public static int GetHealth(GameContext context, Card card)
         {
             return card.health;

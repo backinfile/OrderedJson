@@ -24,14 +24,19 @@ namespace OrderedJson.Core
 
             if (remaps != null)
             {
-                foreach (var pair in remaps)
+                AddRemapMethod(remaps);
+            }
+        }
+
+        public void AddRemapMethod(Dictionary<string, string> remaps)
+        {
+            foreach (var pair in remaps)
+            {
+                var name = pair.Key;
+                var code = pair.Value;
+                if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(code))
                 {
-                    var name = pair.Key;
-                    var code = pair.Value;
-                    if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(code))
-                    {
-                        data[name] = ParseRemapCode(code, name);
-                    }
+                    data[name] = ParseRemapCode(code, name);
                 }
             }
         }
