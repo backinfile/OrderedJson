@@ -51,13 +51,16 @@
   <ItemGroup>
     <Compile Include="Code\Block.cs" />
     <Compile Include="Code\Stmt.cs" />
-    <Compile Include="Core\Blocks.cs" />
     <Compile Include="Core\Exceptions.cs" />
     <Compile Include="Core\IOJMethod.cs" />
     <Compile Include="Core\LocalVar.cs" />
     <Compile Include="Core\OJContext.cs" />
     <Compile Include="Core\OJMethodImpl.cs" />
+    <Compile Include="Core\OJMethods.cs" />
     <Compile Include="Core\OJParser.cs" />
+    <Compile Include="Definer\BinaryOperatorDefiner.cs" />
+    <Compile Include="Definer\CommonDefiner.cs" />
+    <Compile Include="Definer\UnaryOperatorDefiner.cs" />
     <Compile Include="Parser\OJData.cs" />
     <Compile Include="Parser\ParseDefiner.cs" />
     <Compile Include="Parser\TokenParser.cs" />

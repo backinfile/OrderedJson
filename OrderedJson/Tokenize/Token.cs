@@ -90,6 +90,6 @@ namespace OrderedJson.Tokenize
         Or,
         Not,
         Cmp,
-        Name
+        Name,
     }
 }

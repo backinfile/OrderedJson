@@ -21,12 +21,13 @@ namespace OrderedJson.Code
         private string strValue;
         private bool boolValue;
         public List<Stmt> stmts;
+        private IOJMethod method;
 
         internal Block SetValue(object obj)
         {
-            if (obj is Block block)
+            if (obj is IOJMethod method)
             {
-                return SetValue(block);
+                return SetValue(method);
             }
             else if (obj is int value)
             {
@@ -47,25 +48,22 @@ namespace OrderedJson.Code
             throw new RuntimeException($"不能用{obj.GetType()}初始化Block");
         }
 
-        internal Block SetValue(Block block)
+
+        public dynamic GetValue()
         {
-            this.FinalType = block.FinalType;
-            switch (block.FinalType)
+            switch (FinalType)
             {
                 case FinalReturnType.Int:
-                    this.intValue = block.intValue;
-                    break;
+                    return intValue;
                 case FinalReturnType.String:
-                    this.strValue = block.strValue;
-                    break;
+                    return strValue;
                 case FinalReturnType.Bool:
-                    this.boolValue = block.boolValue;
-                    break;
-                case FinalReturnType.Stmts:
-                    SetValue(block.stmts);
-                    break;
+                    return boolValue;
+                //case FinalReturnType.OJMethod:
+                //case FinalReturnType.Stmts:
+                default:
+                    return this;
             }
-            return this;
         }
 
         #region as value
@@ -95,22 +93,7 @@ namespace OrderedJson.Code
 
         
 
-        public dynamic GetValue()
-        {
-            switch (FinalType)
-            {
-                case FinalReturnType.Int:
-                    return intValue;
-                case FinalReturnType.String:
-                    return strValue;
-                case FinalReturnType.Bool:
-                    return boolValue;
-                case FinalReturnType.Stmts:
-                    return this;
-                default:
-                    throw new RuntimeException($"Block没有值！");
-            }
-        }
+        
 
         //public static explicit operator int(Block block)
         //{
@@ -141,6 +124,12 @@ namespace OrderedJson.Code
             }
             return this;
         }
+        internal Block SetValue(IOJMethod method)
+        {
+            FinalType = FinalReturnType.OJMethod;
+            this.method = method;
+            return this;
+        }
         public Type ReturnType => stmts.Last().ReturnType;
 
         //public List<(string, Type)> ArgTypes => stmts.Last().ArgTypes;
@@ -150,6 +139,12 @@ namespace OrderedJson.Code
         public object Invoke(OJContext context, params object[] args)
         {
             //localVar.Clear();
+
+            if (FinalType == FinalReturnType.OJMethod)
+            {
+                return method.Invoke(context);
+            }
+
             object returnValue = null;
             foreach (var stmt in stmts)
             {
@@ -168,6 +163,7 @@ namespace OrderedJson.Code
         Bool,
         None,
         Stmts,
+        OJMethod,
     }
 
 }

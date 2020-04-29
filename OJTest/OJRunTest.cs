@@ -33,7 +33,7 @@ namespace OJTest
             string code = "iftrue: {IncreaseHealth:5}, IncreaseHealth:1";
             IOJMethod method = parser.Parse(code, Filename);
             method.Invoke(context);
-            Assert.AreEqual(context.hostCard.health, 15);
+            Assert.AreEqual(15, context.hostCard.health);
         }
         [TestMethod]
         public void DefalutArgTest()
@@ -41,7 +41,7 @@ namespace OJTest
             string code = "IncreaseHealth";
             IOJMethod method = parser.Parse(code, Filename);
             method.Invoke(context);
-            Assert.AreEqual(context.hostCard.health, 15);
+            Assert.AreEqual(15, context.hostCard.health);
         }
 
 
@@ -53,8 +53,10 @@ namespace OJTest
             method.Invoke(context);
             foreach (var card in context.enemies)
             {
-                Assert.AreEqual(card.health, 111);
+                Assert.AreEqual(111, card.health);
             }
         }
+
+      
     }
 }

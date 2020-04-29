@@ -23,7 +23,7 @@ namespace OJApp
         public static void TestMethod2()
         {
             //string code = @"if: true, {IncreaseHealth:;Log:'in ',health; iftrue}";
-            string code = "iftrue:{Log:'fff'}";
+            string code = "if:true or false, log:'in'";
             Dictionary<string, string> remaps = new Dictionary<string, string>();
             remaps.Add("iftrue", "if:{Equals:health,10},$1");
 

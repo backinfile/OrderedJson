@@ -1,5 +1,6 @@
 ﻿using OrderedJson.Code;
 using OrderedJson.Core;
+using OrderedJson.Definer;
 using OrderedJson.Tokenize;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace OrderedJson.Parser
 
         int index = 0;
 
-        public readonly List<Block> blocks = new List<Block>();
+        public readonly OJMethods blocks = new OJMethods();
         private readonly OJData data;
         internal readonly Dictionary<int, Block> lasyBlocks = new Dictionary<int, Block>();
 
@@ -36,11 +37,20 @@ namespace OrderedJson.Parser
             length = tokens.Count;
             while(index < length)
             {
-                var block = GetBlock();
+                //var block = GetBlock();
+                var block = Expr();
                 if (block != null)
                 {
                     blocks.Add(block);
                 }
+                else
+                {
+                    break;
+                }
+            }
+            if (index < length)
+            {
+                throw new ParseException($"{Value().GetExceptionString()} 匹配失败!");
             }
         }
 
@@ -77,6 +87,7 @@ namespace OrderedJson.Parser
             }
             if (Test(TokenType.Name))
             {
+                // 检测remap函数
                 string value = Value().value;
                 //Console.WriteLine("in this "+value);
                 if (value.StartsWith("$"))
@@ -94,6 +105,13 @@ namespace OrderedJson.Parser
             if (Test(TokenType.LBrace))
             {
                 Next();
+                Block block = Expr();
+                Match(TokenType.RBrace);
+                return block;
+
+            }
+            else
+            {
                 List<Stmt> stmts = new List<Stmt>();
                 while (true)
                 {
@@ -112,21 +130,10 @@ namespace OrderedJson.Parser
                     {
                         break;
                     }
-
                 }
-                Match(TokenType.RBrace);
-
                 if (stmts.Any())
                 {
                     return new Block().SetValue(stmts);
-                }
-            }
-            else
-            {
-                Stmt stmt = GetStmt();
-                if (stmt != null)
-                {
-                    return new Block().SetValue(new List<Stmt>() { stmt });
                 }
             }
             return null;
@@ -178,7 +185,8 @@ namespace OrderedJson.Parser
 
                 while(true)
                 {
-                    Block block = GetBlock();
+                    //Block block = GetBlock();
+                    Block block = Expr();
                     if (block == null)
                     {
                         break;
@@ -199,6 +207,115 @@ namespace OrderedJson.Parser
                 }
             }
             return new Stmt(data.GetMethod(names.Last()), args);
+        }
+
+        /// <summary>
+        /// and or 的优先级
+        /// </summary>
+        /// <returns></returns>
+        private Block Expr()
+        {
+            Block block = Expr1();
+            if (block == null) return null;
+            if (Test(TokenType.Or) || Test(TokenType.And))
+            {
+                Token token = Value();
+                Next();
+                Block right = Expr1();
+                ConfirmBlock(right);
+                block = new Block().SetValue(new BinaryOperatorDefiner(block, right, token));
+            }
+            return block;
+        }
+
+        /// <summary>
+        /// 比较运算符的优先级
+        /// </summary>
+        /// <returns></returns>
+        private Block Expr1()
+        {
+            Block block = Expr2();
+            if (block == null) return null;
+            if (Test(TokenType.Cmp))
+            {
+                Token token = Value();
+                Next();
+                Block right = Expr2();
+                ConfirmBlock(right);
+                block = new Block().SetValue(new BinaryOperatorDefiner(block, right, token));
+            }
+            return block;
+        }
+        
+        /// <summary>
+        /// 加减法的优先级
+        /// </summary>
+        /// <returns></returns>
+        private Block Expr2()
+        {
+            Block block = Expr3();
+            if (block == null) return null;
+            if (Test(TokenType.Add) || Test(TokenType.Sub))
+            {
+                Token token = Value();
+                Next();
+                Block right = Expr3();
+                ConfirmBlock(right);
+                block = new Block().SetValue(new BinaryOperatorDefiner(block, right, token));
+            }
+            return block;
+        }
+
+        /// <summary>
+        /// 乘除法的优先级
+        /// </summary>
+        /// <returns></returns>
+        private Block Expr3()
+        {
+            Block block = Expr4();
+            if (block == null) return null;
+            if (Test(TokenType.Mul) || Test(TokenType.Div))
+            {
+                Token token = Value();
+                Next();
+                Block right = Expr4();
+                ConfirmBlock(right);
+                block = new Block().SetValue(new BinaryOperatorDefiner(block, right, token));
+            }
+            return block;
+        }
+
+        /// <summary>
+        /// 括号,not,neg的优先级 
+        /// </summary>
+        /// <returns></returns>
+        private Block Expr4()
+        {
+            List<Token> tests = new List<Token>();
+            while (Test(TokenType.Not) || Test(TokenType.Sub))
+            {
+                tests.Add(Value());
+                Next();
+            }
+            Block block = Expr5();
+
+            if (tests.Any())
+            {
+                ConfirmBlock(block);
+            }
+            else if (block == null) return null;
+
+            tests.Reverse();
+            foreach (var token in tests)
+            {
+                block = new Block().SetValue(new UnaryOperatorDefiner(block, token));
+            }
+            return block;
+        }
+
+        private Block Expr5()
+        {
+            return GetBlock();
         }
 
 
@@ -236,6 +353,19 @@ namespace OrderedJson.Parser
         private void Next()
         {
             index++;
+        }
+
+        /// <summary>
+        /// 确保block不为空
+        /// </summary>
+        /// <param name="block"></param>
+        private void ConfirmBlock(Block block)
+        {
+            if (block == null)
+            {
+                var token = (index < length) ? Value() : tokens.Last();
+                throw new ParseException($"{token.GetExceptionString()} 不能匹配到语句块");
+            }
         }
     }
 }
