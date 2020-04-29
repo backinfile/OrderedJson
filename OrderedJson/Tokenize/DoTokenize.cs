@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace OrderedJson.Tokenize
 {
+    /// <summary>
+    /// 词法分析
+    /// </summary>
     public class DoTokenize
     {
         private const string Blanks = " \r\n\t";

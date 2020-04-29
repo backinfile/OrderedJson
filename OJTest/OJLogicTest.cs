@@ -19,13 +19,12 @@ namespace OJTest
         [TestInitialize]
         public void Setup()
         {
-            context = new GameContext();
-            context.hostCard = new Card() { health = 10 };
+            context = new GameContext
+            {
+                hostCard = new Card() { health = 10 }
+            };
 
-            Dictionary<string, string> remaps = new Dictionary<string, string>();
-            remaps.Add("iftrue", "ifelse:true,$1,$2");
-
-            parser = new OJParser(typeof(CardCommondDefiner), remaps);
+            parser = new OJParser(typeof(CardCommondDefiner));
         }
 
         [TestMethod]

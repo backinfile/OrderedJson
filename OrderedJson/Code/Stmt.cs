@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace OrderedJson.Code
 {
+    /// <summary>
+    /// 语句, 可以直接调用（只需要OJContext参数）
+    /// </summary>
     public class Stmt: IOJMethod
     {
         internal Block parent;
@@ -17,7 +20,7 @@ namespace OrderedJson.Code
         private IOJMethod method;
         private bool isRemaped = false;
 
-        public Type ReturnType => method.ReturnType;
+        //public Type ReturnType => method.ReturnType;
 
         public string Name { get; set; }
 
@@ -32,6 +35,10 @@ namespace OrderedJson.Code
             this.method = method;
         }
 
+        /// <summary>
+        /// 设置这个语句为映射函数
+        /// </summary>
+        /// <param name="remapName"></param>
         public void SetRemaped(string remapName)
         {
             isRemaped = true;

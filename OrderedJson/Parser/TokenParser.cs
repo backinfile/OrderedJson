@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace OrderedJson.Parser
 {
+
+    /// <summary>
+    /// 解析token，生成Block和Stmt
+    /// </summary>
     public class TokenParser
     {
         /// <summary>
@@ -286,7 +290,7 @@ namespace OrderedJson.Parser
         }
 
         /// <summary>
-        /// 括号,not,neg的优先级 
+        /// not,neg的优先级 
         /// </summary>
         /// <returns></returns>
         private Block Expr4()

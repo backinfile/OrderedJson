@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace OrderedJson.Parser
 {
     /// <summary>
-    /// 存储用户定义的函数和getter
-    /// 不区分大小写
+    /// 存储定义的api
+    /// **不区分大小写**
     /// </summary>
     public class OJData
     {

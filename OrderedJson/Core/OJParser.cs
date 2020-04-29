@@ -11,12 +11,18 @@ using System.Threading.Tasks;
 namespace OrderedJson.Core
 {
     /// <summary>
-    /// 新建一个OJ解析器
+    /// OJ解析器
     /// </summary>
     public class OJParser
     {
         private readonly OJData data;
         private TokenParser parser;
+
+        /// <summary>
+        /// 新建一个OJ解析器
+        /// </summary>
+        /// <param name="ApiDefiner">Api定义类</param>
+        /// <param name="remaps">定义映射函数</param>
         public OJParser(Type ApiDefiner, Dictionary<string, string> remaps = null)
         {
             data = new OJData();
@@ -61,6 +67,12 @@ namespace OrderedJson.Core
             return new OJMethods(blocks);
         }
 
+        /// <summary>
+        /// 解析映射函数脚本
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public IOJMethod ParseRemapCode(string code, string filename)
         {
             parser = new TokenParser(data);

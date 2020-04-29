@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace OrderedJson.Definer
 {
+    /// <summary>
+    /// 定义双目运算符
+    /// </summary>
     internal class BinaryOperatorDefiner : IOJMethod
     {
         readonly Block left;

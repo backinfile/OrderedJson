@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace OrderedJson.Definer
 {
+    /// <summary>
+    /// OJ中的通用类型转化
+    /// </summary>
     public static class CommonDefiner
     {
         public static bool OJToBool(this object obj, OJContext context)

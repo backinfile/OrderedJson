@@ -8,6 +8,10 @@ using OrderedJson.Code;
 
 namespace OrderedJson.Core
 {
+
+    /// <summary>
+    /// IOJMethod的通用实现
+    /// </summary>
     public class OJMethodImpl : IOJMethod
     {
         private readonly MethodInfo methodInfo;

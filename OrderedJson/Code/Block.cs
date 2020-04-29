@@ -9,6 +9,15 @@ using System.Threading.Tasks;
 
 namespace OrderedJson.Code
 {
+
+    /// <summary>
+    /// 语句块，值可以是int/str/bool/stmts/IOJMethod
+    ///     int: 整型数值
+    ///     str: 字符串
+    ///     bool: 布尔型数值
+    ///     stmts: 多个语句
+    ///     IOJMethod: 函数
+    /// </summary>
     public class Block : IOJMethod
     {
         //public LocalVar localVar = new LocalVar();
@@ -130,7 +139,7 @@ namespace OrderedJson.Code
             this.method = method;
             return this;
         }
-        public Type ReturnType => stmts.Last().ReturnType;
+        //public Type ReturnType => stmts.Last().ReturnType;
 
         //public List<(string, Type)> ArgTypes => stmts.Last().ArgTypes;
 

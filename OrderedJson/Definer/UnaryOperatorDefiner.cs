@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 
 namespace OrderedJson.Definer
 {
+
+    /// <summary>
+    /// 定义单目运算符
+    /// </summary>
     internal class UnaryOperatorDefiner:IOJMethod
     {
 

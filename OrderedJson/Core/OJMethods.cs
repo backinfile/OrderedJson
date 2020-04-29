@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace OrderedJson.Core
 {
+    /// <summary>
+    /// IOJMethod的集合类
+    /// </summary>
     public class OJMethods : IOJMethod, IList<IOJMethod>
     {
         private List<IOJMethod> methods;
@@ -31,7 +34,7 @@ namespace OrderedJson.Core
         #region method
         public string Name => methods.Last().Name;
 
-        public Type ReturnType => methods.Last().ReturnType;
+        //public Type ReturnType => methods.Last().ReturnType;
 
         //public List<(string, Type)> ArgTypes => methods.Last().ArgTypes;
 
