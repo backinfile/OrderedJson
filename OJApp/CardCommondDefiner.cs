@@ -103,7 +103,15 @@ namespace OJApp
 
         public static void SetHealth(GameContext context, Card card, int value)
         {
-            card.health = value;
+            if (card != null)
+            {
+                card.health = value;
+            }
+        }
+
+        public static Card GetNullCard(GameContext context)
+        {
+            return null;
         }
 
         public static bool Equals(GameContext context, object obj1, object obj2)

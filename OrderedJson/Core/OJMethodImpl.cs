@@ -60,12 +60,13 @@ namespace OrderedJson.Core
             {
                 if (values[i] == null) continue;
 
-                Type type = values[i].GetType();
-                if (argTypes[i].type != typeof(IOJMethod) && type == typeof(Block))
+                if (argTypes[i].type != typeof(IOJMethod) && values[i].GetType() == typeof(Block))
                 {
                     values[i] = ((Block)values[i]).Invoke(context);
                 }
-                if (!argTypes[i].type.IsAssignableFrom(values[i].GetType()))
+                if (values[i] == null) continue;
+                var type = values[i].GetType();
+                if (!this.argTypes[i].type.IsAssignableFrom(type))
                 {
                     throw new RuntimeException($"{name}的第{i + 1}个参数类型不匹配：需要{argTypes[i].type} 提供了{type}");
                 }

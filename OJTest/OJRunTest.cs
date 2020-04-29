@@ -57,6 +57,24 @@ namespace OJTest
             }
         }
 
-      
+        [TestMethod]
+        [ExpectedException(typeof(ParseException))]
+        public void ExceptionTest()
+        {
+            string code = "setHealth:,,,";
+            IOJMethod method = parser.Parse(code, Filename);
+            method.Invoke(context);
+            Assert.AreEqual(15, context.hostCard.health);
+        }
+
+        [TestMethod]
+        public void NullTest()
+        {
+            string code = "setHealth:GetNullCard, 111";
+            IOJMethod method = parser.Parse(code, Filename);
+            method.Invoke(context);
+            Assert.AreEqual(10, context.hostCard.health);
+        }
+
     }
 }
