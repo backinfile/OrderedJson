@@ -23,10 +23,13 @@ namespace OrderedJson.Core
         /// </summary>
         /// <param name="ApiDefiner">Api定义类</param>
         /// <param name="remaps">定义映射函数</param>
-        public OJParser(Type ApiDefiner, Dictionary<string, string> remaps = null)
+        public OJParser(Type ApiDefiner = null, Dictionary<string, string> remaps = null)
         {
             data = new OJData();
-            ParseDefiner.ParseClass(ApiDefiner, data);
+            if (ApiDefiner != null)
+            {
+                AddClassMethod(ApiDefiner);
+            }
 
             if (remaps != null)
             {
@@ -47,6 +50,15 @@ namespace OrderedJson.Core
             }
         }
 
+        public void AddMethod(string name, IOJMethod method)
+        {
+            data[name] = method;
+        }
+
+        public void AddClassMethod(Type ApiDefiner)
+        {
+            ParseDefiner.ParseClass(ApiDefiner, data);
+        }
 
         /// <summary>
         /// 解析脚本，返回可执行函数IOJMethod

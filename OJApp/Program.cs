@@ -18,6 +18,13 @@ namespace OJApp
         {
             //TestMethod1();
             TestMethod2();
+
+            //DateTime dateTime = DateTime.Now;
+            //for (int i = 0; i < 10000; i++)
+            //{
+            //    1.GetType().GetMembers();
+            //}
+            //Console.WriteLine($"{DateTime.Now - dateTime}");
         }
 
         public static void TestMethod2()

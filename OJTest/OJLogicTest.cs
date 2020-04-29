@@ -28,7 +28,7 @@ namespace OJTest
         }
 
         [TestMethod]
-        public void ORTest()
+        public void ORTest3()
         {
             string code = "if:false or true, IncreaseHealth";
             IOJMethod method = parser.Parse(code, Filename);

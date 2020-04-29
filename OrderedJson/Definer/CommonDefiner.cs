@@ -60,6 +60,9 @@ namespace OrderedJson.Definer
             obj1 = obj1.OJGetValue(context);
             obj2 = obj2.OJGetValue(context);
 
+            if (obj1 == obj2) return 0;
+
+
             if (obj1 is IComparable cmpValue1 && obj2 is IComparable cmpValue2)
             {
                 try
@@ -70,6 +73,10 @@ namespace OrderedJson.Definer
                 {
                     throw new RuntimeException("比较操作作用于两个不同类型的元素了！");
                 }
+            }
+            if (obj1.GetType() == obj2.GetType())
+            {
+                return 1;
             }
             throw new RuntimeException("比较操作作用于不能进行比较的元素了！");
         }
